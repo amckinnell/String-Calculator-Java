@@ -25,6 +25,39 @@ public class StringCalculator {
         return parseStandardDelimiters(numbers);
     }
 
+    private List<Integer> convertToInteger(String[] numbers) {
+        List<Integer> result = new ArrayList<Integer>();
+
+        for (String number : numbers) {
+            result.add(toInteger(number));
+        }
+
+        return result;
+    }
+
+    private void failWhenContainsNegatives(List<Integer> values) {
+        List<Integer> negatives = new ArrayList<Integer>();
+
+        for (Integer value : values) {
+            if (value < 0) negatives.add(value);
+        }
+
+        if (!negatives.isEmpty()) {
+            String message = "Error: negatives not allowed " + negatives;
+            throw new RuntimeException(message);
+        }
+    }
+
+    private int sumOf(List<Integer> values) {
+        int result = 0;
+
+        for (Integer value : values) {
+            result += value;
+        }
+
+        return result;
+    }
+
     private boolean containsCustomDelimiters(String numbers) {
         return numbers.startsWith("//");
     }
@@ -36,7 +69,8 @@ public class StringCalculator {
         String numberList = numbers.substring(newlineIndex + 1);
 
         for (String customDelimiter : parseCustomDelimiters(rawCustomDelimiters)) {
-            numberList = numberList.replaceAll(quoteRegularExpression(customDelimiter), ",");
+            numberList = numberList.replaceAll(
+                            quoteRegularExpression(customDelimiter), ",");
         }
 
         return numberList.split(",");
@@ -54,42 +88,10 @@ public class StringCalculator {
         return numbers.split("[,\n]");
     }
 
-    private List<Integer> convertToInteger(String[] numbers) {
-        List<Integer> result = new ArrayList<Integer>();
-
-        for (String number : numbers) {
-            result.add(toInteger(number));
-        }
-
-        return result;
-    }
-
     private Integer toInteger(String number) {
         Integer value = Integer.parseInt(number);
 
         return value <= 1000 ? value : 0;
-    }
-
-    private void failWhenContainsNegatives(List<Integer> values) {
-        List<Integer> negatives = new ArrayList<Integer>();
-
-        for (Integer value : values) {
-            if (value < 0) negatives.add(value);
-        }
-
-        if (!negatives.isEmpty()) {
-            throw new RuntimeException("Error: negatives not allowed " + negatives);
-        }
-    }
-
-    private int sumOf(List<Integer> values) {
-        int result = 0;
-
-        for (Integer value : values) {
-            result += value;
-        }
-
-        return result;
     }
 
 }
